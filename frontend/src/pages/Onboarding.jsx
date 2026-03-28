@@ -26,8 +26,8 @@ export default function Onboarding() {
   ];
 
   const modes = [
-    { id: '60s', title: '60-second briefings', desc: 'Headlines and key takeaways only', icon: <Clock size={18} /> },
-    { id: 'smart', title: 'Smart summaries', desc: 'The sweet spot — context without overload', icon: <AlignLeft size={18} /> },
+    { id: '60s', title: '60-second Briefings', desc: 'Headlines and key takeaways only', icon: <Clock size={18} /> },
+    { id: 'smart', title: 'Smart summaries', desc: 'The sweet spot: context without overload', icon: <AlignLeft size={18} /> },
     { id: 'deep', title: 'Deep dives', desc: 'Full analysis, data, and expert views', icon: <BookOpen size={18} /> }
   ];
 
