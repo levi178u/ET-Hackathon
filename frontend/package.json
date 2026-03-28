@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build react-scripts build && npm run build:tailwind",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.2",
@@ -18,7 +18,8 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
