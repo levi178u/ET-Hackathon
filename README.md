@@ -13,6 +13,15 @@ Designed for UPSC aspirants and news enthusiasts, it provides curated briefings,
 - Anshuman Panda   (GitHub: [link](https://github.com/levi178u) )
 
 ---
+
+## ⚖️ Features at a Glance
+- [x] **GS Paper Mapping**: Real-time categorization of news.
+- [x] **AI Quiz Hub**: Knowledge testing on daily events.
+- [x] **Premium Assistant**: Context-aware companion with voice.
+- [x] **Dark Mode**: Optimized for high-intensity study sessions.
+- [x] **Direct Stripe Integration**: Frictionless upgrades.
+      
+---
 ## 🏛️ System Architecture
 
 ```mermaid
@@ -184,13 +193,6 @@ ET-Hackathon/
 ```
 
 ---
-
-## ⚖️ Features at a Glance
-- [x] **GS Paper Mapping**: Real-time categorization of news.
-- [x] **AI Quiz Hub**: Knowledge testing on daily events.
-- [x] **Premium Assistant**: Context-aware companion with voice.
-- [x] **Dark Mode**: Optimized for high-intensity study sessions.
-- [x] **Direct Stripe Integration**: Frictionless upgrades.
 
 ## 🔄 Workflows
 
