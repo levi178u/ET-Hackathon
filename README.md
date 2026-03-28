@@ -1,1 +1,215 @@
-# ET-Hackathon
+# 🐿️ News Navigator (Squirrel AI News)
+### The Ultimate AI-Powered UPSC News Enrichment Hub
+
+News Navigator x Squirrel is a high-performance, personalized news experience designed for aspirants, professionals, and curious minds. It leverages state-of-the-art LLMs (Groq / Llama-3) to transform raw news into actionable intelligence for competitive exams like UPSC.
+Designed for UPSC aspirants and news enthusiasts, it provides curated briefings, AI-powered enrichment, to help users master current affairs.
+
+---
+
+## 🏛️ System Architecture
+
+```mermaid
+graph TD
+    User((User))
+    
+    subgraph "Frontend (React + Vite)"
+        UI[UI Components]
+        AuthC[Auth Context]
+        ThemeC[Theme Context]
+        Router[React Router]
+    end
+    
+    subgraph "Backend (FastAPI)"
+        API[FastAPI Gateway]
+        Processor[News Enrichment Engine]
+        Assistant[Squirrel AI Assistant]
+        Payments[Stripe Payment Verifier]
+    end
+    
+    subgraph "Data & Services"
+        DB[(MongoDB)]
+        Groq[Groq Llama-3 API]
+        NAPI[NewsAPI / RSS Feeds]
+        StripeAPI[Stripe Checkout]
+    end
+    
+    User <--> UI
+    UI <--> Router
+    Router <--> API
+    UI <--> AuthC
+    UI <--> ThemeC
+    
+    API <--> Processor
+    API <--> Assistant
+    API <--> Payments
+    
+    Processor <--> Groq
+    Processor <--> NAPI
+    Assistant <--> Groq
+    Payments <--> StripeAPI
+    
+    API <--> DB
+```
+
+---
+
+## 🗃️ Component Catalog
+
+### 🎨 Frontend (UI/UX Layer)
+- **`Feed.jsx`**: The heart of the app. Features dynamic news cards, "Smart Insights," and UPSC-specific prep sections.
+- **`SquirrelChat.jsx`**: A floating AI companion with a custom squirrel character (`sq1.png`, `sq2.png`). Supports context-aware chat and TTS (Text-to-Speech).
+- **`QuizModel.jsx`**: Real-time evaluation. Generates interactive quizzes based on the latest news to test your retention.
+- **`Landing.jsx`**: A premium, glassmorphic landing page designed to "Wow" users and convert them to Pro members.
+- **`ThemeContext.jsx`**: A robust dark-mode engine with vibrant accent colors (Orange, Primary Blue).
+- **`AuthContext.jsx`**: Handles JWT persistence, login, and real-time subscription status syncing.
+
+### ⚙️ Backend (Logic Layer)
+- **`news.py`**: Handles news aggregation and the **UPSC Enrichment Engine** (GS Paper mapping, Prelims facts, Mains prompts).
+- **`assistant.py`**: Orchestrates the Squirrel AI chat experience using high-speed reasoning from Groq.
+- **`payment.py`**: Securely verifies Stripe sessions and automatically upgrades accounts without page refreshes.
+- **`auth.py`**: Comprehensive user management with Bcrypt password hashing and JWT issuance.
+
+### 📊 Data Layer
+- **MongoDB**: Used for storing user profiles, roles (Aspirant/Professional), subscription status, and news cache.
+- **Groq (Llama-3-70b)**: Powers all intelligence, from summarizing news to generating GS-relevant prompts.
+- **Stripe**: Handles the full payment lifecycle from checkout to verification.
+
+---
+
+## ✨ Features
+
+- **Personalized Feed**: Content tailored to your role (Student, Professional, etc.).
+- **UPSC Deep Prep**: Mapping news to GS Papers, Prelims facts, and Mains answers.
+- **Interactive Squirrel**: Your AI companion for explaining news and taking quizzes.
+- **Premium Perks**: Unlock advanced AI tools and UPSC-specific analytics via Stripe.
+- **Dark Mode**: Sleek, eye-friendly design for late-night study sessions.
+
+---
+
+## 🔄 Core Workflows
+
+
+### 🎓 UPSC Enrichment Workflow
+1. **Fetch**: Backend pulls raw news from NewsAPI/RSS.
+2. **Analyze**: AI identifies key entities and maps them to General Studies (GS) Papers.
+3. **Generate**: AI extracts "Prelims Facts" and creates a "Mains Answer Prompt."
+4. **Personalize**: The feed scales the tone based on the user's role (defaults to UPSC Aspirant).
+
+### 💳 Premium Subscription & Verification
+1. User clicks **"Go Premium"**.
+2. Frontend redirects to **Stripe Checkout**.
+3. Upon success, Stripe redirects back with a `session_id`.
+4. Frontend calls `/api/payment/verify-session`.
+5. Backend verifies with Stripe API and updates the DB in real-time.
+6. Frontend updates using `refreshUser()` via `AuthContext`.
+
+---
+
+## 🛠️ Tech Stack & Setup
+
+- **Core**: HTML5, Semantic CSS, JavaScript (ES6+).
+- **Frameworks**: React 19, FastAPI (Python).
+- **Database**: MongoDB (Async Motor driver).
+- **Styling**: Vanilla CSS with modern tokens (Glassmorphism, Dark Mode).
+- **AI**: Groq (Inference Engine).
+- **Payment**: Stripe.
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.9+
+- Node.js 18+
+- MongoDB instance (local or Atlas)
+
+### Local Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/levi178u/ET-Hackathon.git
+   cd ET-Hackathon
+   ```
+
+2. **Environment Variables**
+   Create `.env` in `backend/` and `frontend/`:
+   ```env
+   # Backend .env
+   MONGODB_URL=your_mongo_url
+   GROQ_API_KEY=your_groq_key
+   STRIPE_SECRET_KEY=your_stripe_key
+   NEWSAPI_KEY=your_newsapi_key
+   ```
+
+3. **Running the App**
+   Use our automated deployment script:
+   ```powershell
+   ./scripts/deploy.ps1
+   ```
+
+---
+
+## 🧩 Project Structure
+```text
+ET-Hackathon/
+├── backend/            # FastAPI Project
+│   ├── api/            # Route Handlers (Auth, News, Assistant, Payment)
+│   ├── models/         # Pydantic Schemas
+│   └── main.py         # Entry Point
+├── frontend/           # React + Vite Project
+│   ├── src/
+│   │   ├── components/ # Reusable UI (SquirrelChat, Quiz, Navbar)
+│   │   ├── context/    # Global State (Auth, Theme)
+│   │   └── pages/      # Views (Feed, Landing, Dashboard)
+│   └── public/         # Static Assets (sq1.png, sq2.png)
+└── scripts/            # Automation (Deploy, Setup)
+```
+
+---
+
+## ⚖️ Features at a Glance
+- [x] **GS Paper Mapping**: Real-time categorization of news.
+- [x] **AI Quiz Hub**: Knowledge testing on daily events.
+- [x] **Premium Assistant**: Context-aware companion with voice.
+- [x] **Dark Mode**: Optimized for high-intensity study sessions.
+- [x] **Direct Stripe Integration**: Frictionless upgrades.
+
+## 🔄 Workflows
+
+### 1. UPSC Enrichment Flow
+```mermaid
+sequenceDiagram
+    participant User
+    participant Backend
+    participant Groq
+    participant DB
+
+    User->>Backend: Request Feed (Role: Student)
+    Backend->>DB: Fetch Raw News
+    loop For each article
+        Backend->>Groq: Generate UPSC Insights
+        Groq-->>Backend: GS Paper, Facts, Mains Prompt
+    end
+    Backend-->>User: Personalized UPSC Feed
+```
+
+### 2. Premium Subscription Verification
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant Stripe
+    participant DB
+
+    User->>Frontend: Clicks "Go Premium"
+    Frontend->>Stripe: Redirect to Checkout
+    User->>Stripe: Completes Payment
+    Stripe-->>Frontend: Redirect back with session_id
+    Frontend->>Backend: GET /verify-session?id=...
+    Backend->>Stripe: Finalize & Verify Session
+    Stripe-->>Backend: Session Confirmed
+    Backend->>DB: Update User.is_premium = true
+    Backend-->>Frontend: Success Response
+    Frontend->>Frontend: Refresh User State
+```
+
+---
