@@ -3,7 +3,7 @@ import asyncio
 from groq import AsyncGroq
 
 async def test_key():
-    key = "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"
+    key = os.environ.get("GROQ_API_KEY")
     client = AsyncGroq(api_key=key)
     print(f"Testing key: {key[:10]}...")
     
