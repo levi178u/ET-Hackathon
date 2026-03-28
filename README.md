@@ -1,11 +1,18 @@
 # 🐿️ News Navigator (Squirrel AI News)
+
+![Squirrel](frontend/public/sq.png) X ![ET](frontend/public/et.jpg) X ![UPSC](frontend/public/upsc.png)
+---
 ### The Ultimate AI-Powered UPSC News Enrichment Hub
 
 News Navigator x Squirrel is a high-performance, personalized news experience designed for aspirants, professionals, and curious minds. It leverages state-of-the-art LLMs (Groq / Llama-3) to transform raw news into actionable intelligence for competitive exams like UPSC.
 Designed for UPSC aspirants and news enthusiasts, it provides curated briefings, AI-powered enrichment, to help users master current affairs.
 
 ---
+## Contributors :
+- Priya Singh   (GitHub: [link](https://github.com/priyasingh2709) )
+- Anshuman Panda   (GitHub: [link](https://github.com/levi178u) )
 
+---
 ## 🏛️ System Architecture
 
 ```mermaid
@@ -68,9 +75,12 @@ graph TD
 - **`assistant.py`**: Orchestrates the Squirrel AI chat experience using high-speed reasoning from Groq.
 - **`payment.py`**: Securely verifies Stripe sessions and automatically upgrades accounts without page refreshes.
 - **`auth.py`**: Comprehensive user management with Bcrypt password hashing and JWT issuance.
+- **`db.py`**: prisma client db for user entries and credentials
+- **`feed.py`**: feed engine for live telecasts, feeds and essential engine features
+- **`vector_db.py`**: faiss for indexing and context learning
 
 ### 📊 Data Layer
-- **MongoDB**: Used for storing user profiles, roles (Aspirant/Professional), subscription status, and news cache.
+- **MongoDB/PostgresSQL**: Used for storing user profiles, roles (Aspirant/Professional), subscription status, and news cache.
 - **Groq (Llama-3-70b)**: Powers all intelligence, from summarizing news to generating GS-relevant prompts.
 - **Stripe**: Handles the full payment lifecycle from checkout to verification.
 
@@ -83,6 +93,7 @@ graph TD
 - **Interactive Squirrel**: Your AI companion for explaining news and taking quizzes.
 - **Premium Perks**: Unlock advanced AI tools and UPSC-specific analytics via Stripe.
 - **Dark Mode**: Sleek, eye-friendly design for late-night study sessions.
+- **TTS and Audio Postcasts**: Provides with best in Text-to-Speech, audio briefing and Postcasts
 
 ---
 
@@ -108,11 +119,16 @@ graph TD
 ## 🛠️ Tech Stack & Setup
 
 - **Core**: HTML5, Semantic CSS, JavaScript (ES6+).
-- **Frameworks**: React 19, FastAPI (Python).
-- **Database**: MongoDB (Async Motor driver).
-- **Styling**: Vanilla CSS with modern tokens (Glassmorphism, Dark Mode).
+- **Frameworks**: React, FastAPI (Python), TailwindCSS.
+- **Database**: MongoDB (Async Motor driver) & PostGreSQL Prisma CLI client.
+- **Styling**: Tailwind CSS with modern tokens (Glassmorphism, Dark Mode) and UI elements.
 - **AI**: Groq (Inference Engine).
+- **Vector_DB**: FAISS DB
+- **AI Feats**: Sentence Transformers and LLMA model of Groq AI
+- **TTS**: HuggingFace Models and ElevenLabs
 - **Payment**: Stripe.
+- **Auth**: JWT
+- **Testing**: CLI testing and PyTest
 
 ## 🚀 Getting Started
 
@@ -120,6 +136,7 @@ graph TD
 - Python 3.9+
 - Node.js 18+
 - MongoDB instance (local or Atlas)
+- PostGresSQL or Prisma CLI client
 
 ### Local Setup
 
@@ -133,10 +150,13 @@ graph TD
    Create `.env` in `backend/` and `frontend/`:
    ```env
    # Backend .env
-   MONGODB_URL=your_mongo_url
-   GROQ_API_KEY=your_groq_key
+   DATABASE_URL=your_mongo_url/ postgres_url
+   GROQ_API_KEY=your_groq_key (or) OPENAI_API_KEY=your_openai_key
    STRIPE_SECRET_KEY=your_stripe_key
+   STRIPE_PUBLISHABLE_KEY=your_stripe_pub_key
    NEWSAPI_KEY=your_newsapi_key
+   RAPIDAPI_KEY=your_rapidapi_key_here
+   JWT_SECRET=your_auth_key
    ```
 
 3. **Running the App**
