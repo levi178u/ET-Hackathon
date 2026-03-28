@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "anchor-pki": "^0.3.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0"
+  },
+  "prisma": {
+    "seed": "python prisma/seed.py"
+  }
+}
