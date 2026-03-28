@@ -14,7 +14,7 @@ Designed for UPSC aspirants and news enthusiasts, it provides curated briefings,
 - Anshuman Panda   (GitHub: [link](https://github.com/levi178u) )
 
 ---
-## DashBoard for UPSC Aspirants 
+## DashBoard for UPSC Aspirants & Enthusiasts !
 ![Dashboard](frontend/public/dashboard.png)
 
 ---
