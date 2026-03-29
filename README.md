@@ -29,6 +29,10 @@ Designed for UPSC aspirants and news enthusiasts, it provides curated briefings,
 ![Dashboard](frontend/public/Smart_Insight.png)
 
 ---
+## NewsNavigator of Feeds Section!
+![Dashboard](frontend/public/feed.png)
+
+---
 
 ## ⚖️ Features at a Glance
 - [x] **GS Paper Mapping**: Real-time categorization of news.
@@ -87,6 +91,9 @@ graph TD
 ```
 
 ### Architecture Breakdown
+
+![Dashboard](frontend/public/Sys_Arch.png)
+
 
 #### 1. Frontend Layer
 - **Framework**: React.js powered by Vite for fast development and build.
