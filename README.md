@@ -25,12 +25,30 @@ Designed for UPSC aspirants and news enthusiasts, it provides curated briefings,
 ![Dashboard](frontend/public/AI_Tutor.png)
 
 ---
-## Smart Insights Feature of Feeds Section!
-![Dashboard](frontend/public/Smart_Insight.png)
+## Smart Insights Feature of Feeds Section & Multi Lingual Support!
+<p align="center">
+  <img src="frontend/public/Smart_Insight.png" width="55%" />
+  <img src="frontend/public/hindi.png" width="20%" />
+  <img src="frontend/public/multi.png" width="20%" />
+      
+</p>
+
 
 ---
 ## NewsNavigator of Feeds Section!
 ![Dashboard](frontend/public/feed.png)
+
+---
+## DashBoard for Quiz Generator & Tests !
+![Dashboard](frontend/public/quiz_gen.png)
+
+---
+## DashBoard for Payments Updates !
+<p align="center">
+  <img src="frontend/public/payements.png" width="45%" />
+  <img src="frontend/public/invoice.png" width="35%" />
+  
+</p>
 
 ---
 
