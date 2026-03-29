@@ -2,14 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
+load_dotenv()
 from api.db import prisma, connect_db, disconnect_db
 from api.user import router as user_router
 from api.news import router as news_router
 from api.assistant import router as assistant_router
 from api.payment import router as payment_router
 from api.auth import router as auth_router
-
-load_dotenv()
 
 app = FastAPI(title="Squirrel API")
 

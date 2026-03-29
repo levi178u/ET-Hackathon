@@ -4,12 +4,12 @@ from groq import AsyncGroq
 import os
 import base64
 from io import BytesIO
-try:
-    from gtts import gTTS
-except ImportError:
-    gTTS = None
+import gtts
+from gtts import gTTS
+print("Loaded gTTS successfully")
 from api import vector_db
 
+# TTS integration for Squirrel IAS
 router = APIRouter(prefix="/api/assistant", tags=["Assistant"])
 
 try:

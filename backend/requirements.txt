@@ -13,7 +13,10 @@ python-dotenv==1.0.1
 pydantic==2.5.3
 pydantic-settings==2.1.0
 python-multipart==0.0.6
-jose==1.0.0
+PyJWT==2.8.0
 passlib==1.7.4
 bcrypt==4.1.2
 stripe==7.13.0
+pydantic[email]
+email-validator
+gTTS==2.5.1

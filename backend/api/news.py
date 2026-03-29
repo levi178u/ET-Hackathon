@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Body
 from typing import List, Dict, Any
 import feedparser
 from groq import AsyncGroq
@@ -34,7 +34,7 @@ async def summarize_article(content: str) -> str:
             }, {
                 "role": "user", "content": content
             }],
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             max_tokens=250,
             temperature=0.3
         )
@@ -66,9 +66,8 @@ async def generate_insights(content: str, role: str) -> str:
         print(f"Insight error: {e}")
         return "Insight generation failed. Please try again later."
 
-@router.get("/fetch")
-async def fetch_news(background_tasks: BackgroundTasks):
-    """Fetches latest news and indexes in background to prevent request timeouts."""
+async def get_latest_articles(background_tasks: BackgroundTasks = None) -> List[Dict[str, Any]]:
+    """Core logic to fetch latest news from multiple sources."""
     articles = []
     
     def index_article(item):
@@ -78,11 +77,17 @@ async def fetch_news(background_tasks: BackgroundTasks):
             print(f"Background indexing error: {e}")
 
     # 1. Fetch from NewsAPI First (Live headlines)
-    if newsapi:
+    if NEWS_API_KEY:
         try:
-            top_headlines = await anyio.to_thread.run_sync(
-                lambda: newsapi.get_top_headlines(language='en', country='in')
-            )
+            async with httpx.AsyncClient() as client:
+                resp = await client.get(
+                    "https://newsapi.org/v2/top-headlines",
+                    params={"language": "en", "country": "in", "apiKey": NEWS_API_KEY},
+                    timeout=5.0
+                )
+                resp.raise_for_status()
+                top_headlines = resp.json()
+                
             for article in top_headlines.get('articles', [])[:10]:
                 content = article.get('description', '') or article.get('content', '')
                 if not content: continue
@@ -94,26 +99,35 @@ async def fetch_news(background_tasks: BackgroundTasks):
                     "publishedAt": article.get('publishedAt', '')
                 }
                 articles.append(item)
-                background_tasks.add_task(index_article, item)
+                if background_tasks:
+                    background_tasks.add_task(index_article, item)
         except Exception as e:
             print(f"NewsAPI error: {e}")
 
     # 2. Add Standard RSS in Parallel
+    import httpx
     async def fetch_rss_source(source, url):
         try:
-            feed = await anyio.to_thread.run_sync(lambda: feedparser.parse(url))
+            async with httpx.AsyncClient() as client:
+                response = await client.get(url, timeout=5.0)
+                response.raise_for_status()
+                feed = feedparser.parse(response.text)
+
             source_articles = []
-            for entry in feed.entries[:5]: 
-                content = entry.get('summary', '') or entry.get('description', '')
+            for entry in feed.entries[:8]: 
+                content = (entry.get('summary', '') or entry.get('description', '')).strip()
+                if not content or len(content) < 10:
+                    continue
                 item = {
-                    "title": entry.title,
-                    "link": entry.link,
+                    "title": entry.get('title', 'No Title'),
+                    "link": entry.get('link', '#'),
                     "summary_raw": content,
                     "source": source,
                     "publishedAt": entry.get('published', entry.get('updated', ''))
                 }
                 source_articles.append(item)
-                background_tasks.add_task(index_article, item)
+                if background_tasks:
+                    background_tasks.add_task(index_article, item)
             return source_articles
         except Exception as e:
             print(f"RSS error for {source}: {e}")
@@ -123,7 +137,13 @@ async def fetch_news(background_tasks: BackgroundTasks):
     rss_results = await asyncio.gather(*rss_tasks)
     for result in rss_results:
         articles.extend(result)
+    
+    return articles
 
+@router.get("/fetch")
+async def fetch_news(background_tasks: BackgroundTasks):
+    """Fetches latest news and indexes in background to prevent request timeouts."""
+    articles = await get_latest_articles(background_tasks)
     return {"status": "success", "count": len(articles), "articles": articles}
 
 async def generate_upsc_enrichment(content: str) -> Dict[str, str]:
@@ -150,8 +170,16 @@ async def generate_upsc_enrichment(content: str) -> Dict[str, str]:
         return {"upscSyllabus": "General Studies", "upscFacts": "Check source for details", "upscMainsPrompt": "How does this affect India?"}
 
 @router.post("/process")
-async def process_single_article(article_data: Dict[str, Any], role: str = "Student"):
+async def process_single_article(article_data: Dict[str, Any] = Body(None), role: str = "Student"):
     """Takes raw article content, summarizes it, and generates insights + UPSC enrichment if needed."""
+    if not article_data:
+        # Auto-select the top story if no article is provided
+        articles = await get_latest_articles()
+        if not articles:
+            return {"error": "No articles found in news feed to auto-process."}
+        article_data = articles[0]
+        article_data["is_auto_selected"] = True
+
     content = str(article_data.get("content", article_data.get("summary_raw", "")))
     
     tasks = [summarize_article(content), generate_insights(content, role)]
@@ -194,7 +222,7 @@ async def fetch_rapidapi(endpoint: str):
     }
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.get(url, headers=headers, timeout=30.0)
+            response = await client.get(url, headers=headers, timeout=10.0)
             response.raise_for_status()
             data = response.json()
             if endpoint == 'history-of-today' and isinstance(data, list):
@@ -202,8 +230,10 @@ async def fetch_rapidapi(endpoint: str):
                     if 'date' in item: item['date'] = item['date'].strip()
                     if 'description' in item: item['description'] = item['description'].strip()
             return data
+        except httpx.HTTPStatusError as e:
+             raise HTTPException(status_code=e.response.status_code, detail=f"RapidAPI Error: {e.response.text}")
         except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=500, detail=f"RapidAPI Connection Error: {str(e)}")
 
 @router.get("/current-affairs/international-today")
 async def get_international_today():
