@@ -28,8 +28,8 @@ Designed for UPSC aspirants and news enthusiasts, it provides curated briefings,
 ## Smart Insights Feature of Feeds Section & Multi Lingual Support!
 <p align="center">
   <img src="frontend/public/Smart_Insight.png" width="55%" />
-  <img src="frontend/public/hindi.png" width="22%" />
-  <img src="frontend/public/multi.png" width="22%" />
+  <img src="frontend/public/hindi.png" width="20%" />
+  <img src="frontend/public/multi.png" width="20%" />
       
 </p>
 
