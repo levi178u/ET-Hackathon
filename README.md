@@ -8,8 +8,25 @@
 News Navigator x Squirrel is a high-performance, personalized news experience designed for aspirants, professionals, and curious minds. It leverages state-of-the-art LLMs (Groq / Llama-3) to transform raw news into actionable intelligence for competitive exams like UPSC.
 Designed for UPSC aspirants and news enthusiasts, it provides curated briefings, AI-powered enrichment, to help users master current affairs.
 
+## Special Feature for UPSC Aspirants!
+![Dashboard](frontend/public/upsc_subs.png)
+
+---
+
 ## DashBoard for UPSC Aspirants & Enthusiasts !
 ![Dashboard](frontend/public/dashboard.png)
+
+---
+## DashBoard for TEST Series & Daily Challenges!
+![Dashboard](frontend/public/tests.png)
+
+---
+## DashBoard for Personalized AI Tutor!
+![Dashboard](frontend/public/AI_Tutor.png)
+
+---
+## Smart Insights Feature of Feeds Section!
+![Dashboard](frontend/public/Smart_Insight.png)
 
 ---
 
