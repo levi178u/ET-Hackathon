@@ -21,59 +21,52 @@ Designed for UPSC aspirants and news enthusiasts, it provides curated briefings,
 - [x] **Direct Stripe Integration**: Frictionless upgrades.
       
 ---
-## 🚀 Advanced System Architecture
+## 🚀 System Architecture
 
 ```mermaid
 graph TD
+    User((User))
+    
     subgraph "Frontend (React + Vite)"
-        UI["User Interface (Tailwind CSS)"]
-        Components["React Components (Lucide Icons)"]
-        State["State Management (Axios + Context API)"]
+        UI[UI Components]
+        AuthC[Auth Context]
+        ThemeC[Theme Context]
+        Router[React Router]
     end
+    
 
     subgraph "Backend (FastAPI)"
-        API["FastAPI REST Endpoints"]
-        Auth["Auth Controller (Prisma)"]
-        NewsEngine["News Fetch Engine (RSS/NewsAPI/RapidAPI)"]
-        Assistant["Assistant Logic (Groq + RAG)"]
-        VectorDB["FAISS Vector Store (Semantic Search)"]
-        Payment["Stripe Integration"]
+        API[FastAPI Gateway]
+        Processor[News Enrichment Engine]
+        Assistant[Squirrel AI Assistant]
+        Payments[Stripe Payment Verifier]
     end
-
-    subgraph "Data Storage"
-        SQLite[("SQLite (Core Data - Prisma)")]
-        VectorIndex[("FAISS Index (.bin)")]
-        LocalCache[("Local JSON Cache")]
-    end
-
-    subgraph "External Services"
-        Groq["Groq Cloud (LLM - Llama 3)"]
-        NewsAPI["NewsAPI.org"]
-        RSS["Standard RSS Feeds (PIB, etc.)"]
-        RapidAPI["RapidAPI (Current Affairs)"]
-        Stripe["Stripe (Subscription & Payments)"]
-    end
-
-    %% Connections
-    UI <--> State
-    State <--> API
     
-    API <--> Auth
+    subgraph "Data & Services"
+        DB[(MongoDB)]
+        Groq[Groq Llama-3 API]
+        NAPI[NewsAPI / RSS Feeds]
+        StripeAPI[Stripe Checkout]
+
+    end
+  
+    User <--> UI
+    UI <--> Router
+    Router <--> API
+    UI <--> AuthC
+    UI <--> ThemeC
+    
+    API <--> Processor
     API <--> NewsEngine
     API <--> Assistant
-    API <--> Payment
-
-    Auth <--> SQLite
-    NewsEngine <--> NewsAPI
-    NewsEngine <--> RSS
-    NewsEngine <--> RapidAPI
-    NewsEngine <--> SQLite
-
+    
+    Processor <--> Groq
+    Processor <--> NAPI
+   
     Assistant <--> Groq
-    Assistant <--> VectorDB
-    VectorDB <--> VectorIndex
-
-    Payment <--> Stripe
+    Payments <--> StripeAPI
+    
+    API <--> DB
 ```
 
 ### Architecture Breakdown
