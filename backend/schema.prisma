@@ -1,0 +1,87 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider             = "prisma-client-py"
+  interface            = "asyncio"
+  recursive_type_depth = 5
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  password       String?
+  name           String?
+  role           String   @default("Student")
+  interests      String   @default("")
+  readingMode    String   @default("Smart summaries")
+  isPremium      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  readingHistory ReadingHistory[]
+  quizScores     QuizScore[]
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  summary     String?
+  source      String
+  url         String   @unique
+  publishedAt DateTime
+  categories  String   @default("")
+
+  studentInsight   String?
+  investorInsight  String?
+  developerInsight String?
+  founderInsight   String?
+
+  // UPSC Specific
+  upscSyllabus     String?
+  upscFacts        String?
+  upscMainsPrompt  String?
+
+  createdAt   DateTime @default(now())
+
+  // Relations
+  readers     ReadingHistory[]
+  quizzes     Quiz[]
+}
+
+model ReadingHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  articleId String
+  timeSpent Int      @default(0)
+  readAt    DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  article   Article  @relation(fields: [articleId], references: [id])
+}
+
+model Quiz {
+  id        String   @id @default(cuid())
+  articleId String
+  questions String
+  createdAt DateTime @default(now())
+
+  article   Article  @relation(fields: [articleId], references: [id])
+  scores    QuizScore[]
+}
+
+model QuizScore {
+  id        String   @id @default(cuid())
+  userId    String
+  quizId    String
+  score     Int
+  total     Int
+  takenAt   DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+}
